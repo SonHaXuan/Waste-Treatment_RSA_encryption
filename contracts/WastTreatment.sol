@@ -32,10 +32,10 @@ contract WastTreatment is Ownable, ERC721URIStorage {
 
     function transfer(address _to, uint256 _tokenId) external payable {
         _validate(_tokenId);
-
+        
         // emit Purchase(address(this), price[_tokenId], _tokenId);
-        emit Purchase(address(this), 1, _tokenId);
-        super._transfer(address(this), _to, _tokenId);
+        emit Purchase(_owner, 1, _tokenId);
+        super._transfer(_owner, _to, _tokenId);
 
         // get owner of the token
         address payable sendTo = payable(ownerOf(_tokenId));
@@ -44,8 +44,8 @@ contract WastTreatment is Ownable, ERC721URIStorage {
 
     function _validate(uint256 _id) internal view {
         require(_exists(_id), "Error, wrong Token id");
-        require(sold[_id], "Error, Token is sold");
-
+        require(_ownerOf(_id) == _owner, "You are not the owner of the Nft");
+        // require(sold[_id], "Error, Token is sold");
         // require(msg.value >= price[_id], "Error, Token costs more");
     }
 }
